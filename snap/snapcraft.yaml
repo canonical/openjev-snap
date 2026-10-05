@@ -2,7 +2,10 @@ name: openjev
 title: OpenJev
 summary: Local AI with OpenJev inference snap
 description: |
-  OpenJev is an open-weights decision model that makes typed decisions about text, web pages and screenshots. You describe the decision in plain words at request time, with your own labels, and it answers with a choice, a yes/no probability or a score. It can route support tickets, flag policy violations, judge whether an answer is grounded, and guide browser agents.
+  OpenJev is an open-weights decision model that makes typed decisions about text, web pages and screenshots.
+  You describe the decision in plain words at request time, with your own labels, and it answers with a choice,
+  a yes/no probability or a score. It can route support tickets, flag policy violations, judge whether an
+  answer is grounded, and guide browser agents.
 
   Use this snap to quickly install an optimized environment for local inference with OpenJev.
 
@@ -34,7 +37,7 @@ description: |
   `/snap/openjev/current/usr/share/doc`.
 
 website: https://documentation.ubuntu.com/inference-snaps
-source-code: https://github.com/imatrisciano/openjev-snap
+source-code: https://github.com/canonical/openjev-snap
 issues: https://github.com/canonical/inference-snaps/issues
 
 adopt-info: version
@@ -86,8 +89,8 @@ parts:
 
   cli:
     source:
-      - on amd64: https://github.com/canonical/inference-snaps-cli/releases/download/v2.0.0-beta.13/inference-snaps-cli-linux-amd64.tar.xz
-      - on arm64: https://github.com/canonical/inference-snaps-cli/releases/download/v2.0.0-beta.13/inference-snaps-cli-linux-arm64.tar.xz
+      - on amd64: https://github.com/canonical/inference-snaps-cli/releases/download/v2.0.0-beta.15/inference-snaps-cli-linux-amd64.tar.xz
+      - on arm64: https://github.com/canonical/inference-snaps-cli/releases/download/v2.0.0-beta.15/inference-snaps-cli-linux-arm64.tar.xz
     plugin: dump
     override-build: |
 
@@ -200,25 +203,22 @@ parts:
 
   llamacpp-rocm:
     plugin: dump
-    source:
-      - on amd64: https://github.com/canonical/llama.cpp-builds/releases/download/b11408/llamacpp-amd64+rocm.tar.gz
-      # ROCm builds are only published for amd64. The arm64 entry only satisfies
-      # the source grammar; its content is discarded below.
-      - on arm64: https://github.com/canonical/llama.cpp-builds/releases/download/b11408/llamacpp-arm64.tar.gz
+    source: https://github.com/canonical/llama.cpp-builds/releases/download/b11408/llamacpp-amd64+rocm.tar.gz
+    override-pull: |
+      [ "$CRAFT_ARCH_BUILD_FOR" == "amd64" ] && craftctl default || exit 0
     override-build: |
-      if [ "$CRAFT_ARCH_BUILD_FOR" != "amd64" ]; then
-        # The amd-gpu engine requires amd64; ship a placeholder so the component is not empty
-        echo "The ROCm runtime is not available on $CRAFT_ARCH_BUILD_FOR" > $CRAFT_PART_INSTALL/README
-        exit 0
-      fi
+      [ "$CRAFT_ARCH_BUILD_FOR" == "amd64" ] && craftctl default || exit 0
 
       # Move license files to be included in the snap, not the component
       mkdir -p $CRAFT_PRIME/usr/share/doc/
       mv licenses $CRAFT_PRIME/usr/share/doc/llama.cpp-rocm
-
-      craftctl default
+    override-stage: |
+      [ "$CRAFT_ARCH_BUILD_FOR" == "amd64" ] && craftctl default || exit 0
+    override-prime: |
+      [ "$CRAFT_ARCH_BUILD_FOR" == "amd64" ] && craftctl default || exit 0
     stage-packages:
       - libgomp1
+      - libatomic1
     organize:
       # move everything, including the staged packages
       "*": (component/llamacpp-rocm)
@@ -231,6 +231,7 @@ parts:
       license_dir=$CRAFT_PART_INSTALL/usr/share/doc
       mkdir -p $license_dir
       cp NOTICE $license_dir/
+      cp $SNAPCRAFT_PROJECT_DIR/NOTICE-openjev $license_dir/
       cp $SNAPCRAFT_PROJECT_DIR/LICENSE $license_dir/
       cp $SNAPCRAFT_PROJECT_DIR/LICENSE-openjev $license_dir/
 
@@ -268,7 +269,7 @@ components:
 
 apps:
   openjev:
-    command: bin/modelctl
+    command: bin/openjev
     completer: bin/snap-completer.bash
     plugs:
       - hardware-observe

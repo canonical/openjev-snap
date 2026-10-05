@@ -25,14 +25,9 @@ jobs:
       pr-number: "${{ github.event.pull_request.number }}"
       build-runner: |
         [
-          "ubuntu-24.04",
-          "ubuntu-24.04-arm"
+          ["amd64", "2xlarge-extra", "noble", "self-hosted"],
+          ["arm64", "large-extra", "noble", "self-hosted"]
         ]
-      # One test job per engine shipped by the snap. The model declares the
-      # "vision" capability (mmproj shipped), so image prompts are tested.
-      # expected-tps is intentionally unset until a measured baseline exists.
-      # amd-gpu: no AMD GPU Testflinger queue is configured yet; add a job with
-      # "select-engine": "amd-gpu" once a suitable queue is available.
       test-jobs-matrix: |
         [
           {

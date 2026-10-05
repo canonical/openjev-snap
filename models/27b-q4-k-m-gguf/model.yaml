@@ -1,6 +1,6 @@
 name: 27b-q4-k-m-gguf
 
-description: OpenJev 27B decision model in GGUF format with Q4_K_M quantization, with a Q8_0 multimodal projector for screenshot input
+description: OpenJev 27B decision model in GGUF format.
 model-card-url: https://huggingface.co/openjev/openjev
 quantization: Q4_K_M
 
@@ -9,6 +9,7 @@ disk-size: 18696M # 4 model shards + mmproj
 capabilities:
   - text
   - vision
+  # TODO: add 'decision' once accepted by the cli
 
 components:
   - model-27b-q4-k-m-gguf-1-of-4

@@ -40,7 +40,7 @@ openjev
 
 Clone the repo:
 ```shell
-git clone https://github.com/imatrisciano/openjev-snap
+git clone https://github.com/canonical/openjev-snap
 cd openjev-snap
 ```
 

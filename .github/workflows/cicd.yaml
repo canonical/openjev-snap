@@ -17,7 +17,7 @@ concurrency:
 
 jobs:
   cicd:
-    if: github.repository == 'imatrisciano/openjev-snap' # do not run on forks
+    if: github.repository == 'canonical/openjev-snap' # do not run on forks
     uses: canonical/inference-snaps-dev/.github/workflows/reuse-cicd.yaml@v2
     with:
       build-runner: |
