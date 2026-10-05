@@ -1,0 +1,21 @@
+OpenJev inference snap
+Copyright 2026 Canonical Ltd.
+
+This snap packages the following third-party components:
+
+OpenJev model weights (GGUF, Q4_K_M)
+  Provided by OpenJev: https://huggingface.co/openjev/openjev
+  Licensed under the Creative Commons Attribution-NonCommercial 4.0 International
+  (CC BY-NC 4.0) license: https://creativecommons.org/licenses/by-nc/4.0/
+  OpenJev is built on an Apache 2.0 licensed open base model; see the upstream
+  NOTICE file: https://huggingface.co/openjev/openjev/blob/main/NOTICE
+
+OpenJev multimodal projector (GGUF, Q8_0)
+  Converted by ggml-org: https://huggingface.co/ggml-org/OpenJev-GGUF
+  Licensed under the same terms as the OpenJev model weights (CC BY-NC 4.0).
+
+llama.cpp
+  https://github.com/ggml-org/llama.cpp
+  Built by Canonical: https://github.com/canonical/llama.cpp-builds
+  Licensed under the MIT license. License files are included in
+  /snap/openjev/current/usr/share/doc/llama.cpp*

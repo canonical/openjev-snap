@@ -1,0 +1,20 @@
+name: nvidia-gpu
+summary: NVIDIA GPU engine
+description: CUDA-enabled GPU acceleration for NVIDIA GPUs, using llama.cpp
+vendor: Canonical Ltd
+devices:
+  allof:
+    - type: gpu
+      bus: pci
+      vendor-id: 0x10de # NVIDIA Corporation
+      vram: 20G # The Q4_K_M model with mmproj is ~18.3 GiB
+
+runtime: llamacpp-cuda
+
+model:
+  default: 27b-q4-k-m-gguf
+  options:
+    - 27b-q4-k-m-gguf
+
+configurations:
+  sleep-idle-seconds: 600

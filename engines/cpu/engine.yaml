@@ -1,0 +1,20 @@
+name: cpu
+summary: CPU engine
+description: General CPU engine for x64 and ARM (armv8, armv9) CPUs, using llama.cpp
+vendor: Canonical Ltd
+devices:
+  anyof:
+    - type: cpu
+      architecture: amd64
+    - type: cpu
+      architecture: arm64
+
+runtime: llamacpp
+
+model:
+  default: 27b-q4-k-m-gguf
+  options:
+    - 27b-q4-k-m-gguf
+
+configurations:
+  sleep-idle-seconds: 600

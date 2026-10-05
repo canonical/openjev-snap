@@ -1,0 +1,38 @@
+name: 27b-q4-k-m-gguf
+
+description: OpenJev 27B decision model in GGUF format with Q4_K_M quantization, with a Q8_0 multimodal projector for screenshot input
+model-card-url: https://huggingface.co/openjev/openjev
+quantization: Q4_K_M
+
+disk-size: 18696M # 4 model shards + mmproj
+
+capabilities:
+  - text
+  - vision
+
+components:
+  - model-27b-q4-k-m-gguf-1-of-4
+  - model-27b-q4-k-m-gguf-2-of-4
+  - model-27b-q4-k-m-gguf-3-of-4
+  - model-27b-q4-k-m-gguf-4-of-4
+  - mmproj-27b-q8-0-gguf
+
+environment:
+  # The model is split into multiple shards, maintained in individual component directories.
+  # However, llama-server expects the shards to be located in the same directory.
+  # The layout below flattens them into a single directory via symlinks.
+  # The model file path is set to the first shard's symlink:
+  - MODEL_PARTS_DIR=/tmp/27b-q4-k-m-gguf-parts
+  - MODEL_FILE=$MODEL_PARTS_DIR/OpenJev-Q4_K_M-00001-of-00004.gguf
+  - MODEL_NAME=27b-q4-k-m
+  - MMPROJ_FILE=$SNAP_COMPONENTS/mmproj-27b-q8-0-gguf/mmproj-OpenJev-Q8_0.gguf
+
+layout:
+  $MODEL_PARTS_DIR/OpenJev-Q4_K_M-00001-of-00004.gguf:
+    symlink: $SNAP_COMPONENTS/model-27b-q4-k-m-gguf-1-of-4/OpenJev-Q4_K_M-00001-of-00004.gguf
+  $MODEL_PARTS_DIR/OpenJev-Q4_K_M-00002-of-00004.gguf:
+    symlink: $SNAP_COMPONENTS/model-27b-q4-k-m-gguf-2-of-4/OpenJev-Q4_K_M-00002-of-00004.gguf
+  $MODEL_PARTS_DIR/OpenJev-Q4_K_M-00003-of-00004.gguf:
+    symlink: $SNAP_COMPONENTS/model-27b-q4-k-m-gguf-3-of-4/OpenJev-Q4_K_M-00003-of-00004.gguf
+  $MODEL_PARTS_DIR/OpenJev-Q4_K_M-00004-of-00004.gguf:
+    symlink: $SNAP_COMPONENTS/model-27b-q4-k-m-gguf-4-of-4/OpenJev-Q4_K_M-00004-of-00004.gguf

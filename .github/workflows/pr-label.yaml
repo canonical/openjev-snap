@@ -28,14 +28,19 @@ jobs:
           "ubuntu-24.04",
           "ubuntu-24.04-arm"
         ]
-      # TODO: Adjust the test matrix to match the target hardware/engines.
+      # One test job per engine shipped by the snap. The model declares the
+      # "vision" capability (mmproj shipped), so image prompts are tested.
+      # expected-tps is intentionally unset until a measured baseline exists.
+      # amd-gpu: no AMD GPU Testflinger queue is configured yet; add a job with
+      # "select-engine": "amd-gpu" once a suitable queue is available.
       test-jobs-matrix: |
         [
           {
             "job-queue": "maas-systemtests-amd64",
             "provision-data": "distro: noble",
             "select-engine": "cpu",
-            "test-chat-tps": true
+            "test-chat-tps": true,
+            "test-image-prompt": true
           },
           {
             "job-queue": "anbox-nvidia-amd64",
@@ -43,11 +48,10 @@ jobs:
             "install-nvidia-driver-version": 595,
             "select-engine": "nvidia-gpu",
             "test-chat-tps": true,
-            "expected-tps": 9.4
+            "test-image-prompt": true
           }
         ]
-      # TODO: Replace with the snap name.
-      snap-name: <snap-name>
+      snap-name: openjev
       testflinger-client-id: ${{ vars.TESTFLINGER_CLIENT_ID }}
     secrets:
       store-credentials: ${{ secrets.STORE_LOGIN_PR }}
