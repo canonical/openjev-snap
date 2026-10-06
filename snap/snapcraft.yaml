@@ -63,6 +63,14 @@ plugs:
   home:
     read: all
 
+slots:
+  provider:
+    interface: content
+    content: inference-provider
+    source:
+      read:
+        - $SNAP_COMMON/share/provider
+
 hooks:
   install:
     plugs: &install-plugs
