@@ -1,7 +1,7 @@
 name: openjev-27b
 
-description: OpenJev 27B decision model in GGUF format.
-model-card-url: https://huggingface.co/openjev/openjev
+description: OpenJev 27B a multimodal (text + vision) decision model in GGUF format.
+model-card-url: https://huggingface.co/inference-snaps/openjev-Q4_K_M-5GB
 quantization: Q4_K_M
 
 disk-size: 18696M # 4 model shards + mmproj
