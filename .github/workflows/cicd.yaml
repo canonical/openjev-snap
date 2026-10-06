@@ -28,10 +28,6 @@ jobs:
       store-track: latest
       snap-name: openjev
       smoke-test-engine: cpu
-      smoke-test-runner: |
-        [
-          "ubuntu-24.04",
-          "ubuntu-24.04-arm"
-        ]
+      smoke-test-features: openai_models, openai_chat_text
     secrets:
       store-credentials: ${{ secrets.STORE_LOGIN_MAIN }}
