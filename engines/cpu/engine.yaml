@@ -12,9 +12,9 @@ devices:
 runtime: llamacpp
 
 model:
-  default: 27b-q4-k-m-gguf
+  default: openjev-27b
   options:
-    - 27b-q4-k-m-gguf
+    - openjev-27b
 
 configurations:
   sleep-idle-seconds: 600

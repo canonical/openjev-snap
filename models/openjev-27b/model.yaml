@@ -1,4 +1,4 @@
-name: 27b-q4-k-m-gguf
+name: openjev-27b
 
 description: OpenJev 27B decision model in GGUF format.
 model-card-url: https://huggingface.co/openjev/openjev
@@ -23,9 +23,9 @@ environment:
   # However, llama-server expects the shards to be located in the same directory.
   # The layout below flattens them into a single directory via symlinks.
   # The model file path is set to the first shard's symlink:
-  - MODEL_PARTS_DIR=/tmp/27b-q4-k-m-gguf-parts
+  - MODEL_PARTS_DIR=/tmp/openjev-27b-q4-k-m-gguf-parts
   - MODEL_FILE=$MODEL_PARTS_DIR/OpenJev-Q4_K_M-00001-of-00004.gguf
-  - MODEL_NAME=27b-q4-k-m
+  - MODEL_NAME=openjev-27b
   - MMPROJ_FILE=$SNAP_COMPONENTS/mmproj-27b-q8-0-gguf/mmproj-OpenJev-Q8_0.gguf
 
 layout:
