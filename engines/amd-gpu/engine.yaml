@@ -1,5 +1,6 @@
 name: amd-gpu
 summary: AMD GPU engine
+experimental: true
 description: |
   ROCm-enabled GPU acceleration for AMD GPUs, using llama.cpp.
   Targets the microarchitectures the llama.cpp ROCm build is compiled for.
