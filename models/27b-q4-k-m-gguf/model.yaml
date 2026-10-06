@@ -9,7 +9,7 @@ disk-size: 18696M # 4 model shards + mmproj
 capabilities:
   - text
   - vision
-  # TODO: add 'decision' once accepted by the cli
+  - decision
 
 components:
   - model-27b-q4-k-m-gguf-1-of-4
