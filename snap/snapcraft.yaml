@@ -160,8 +160,8 @@ parts:
       "server-webui.sh": bin/
 
   # Model weights are downloaded into model-weights/ by `make download-models`.
-  # The 4 GGUF shards are split across 4 components to stay below Store size limits.
-  local-component-files:
+  # Shards are split across components to stay below Store size limits.
+  model-weights:
     plugin: cmake
     source: model-weights
     override-build: |
