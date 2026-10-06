@@ -239,7 +239,6 @@ parts:
       license_dir=$CRAFT_PART_INSTALL/usr/share/doc
       mkdir -p $license_dir
       cp NOTICE $license_dir/
-      cp $SNAPCRAFT_PROJECT_DIR/NOTICE-openjev $license_dir/
       cp $SNAPCRAFT_PROJECT_DIR/LICENSE $license_dir/
       cp $SNAPCRAFT_PROJECT_DIR/LICENSE-openjev $license_dir/
 

@@ -1,21 +1,9 @@
-OpenJev inference snap
-Copyright 2026 Canonical Ltd.
+OpenJev is provided under and subject to the Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0) license, available at: https://creativecommons.org/licenses/by-nc/4.0/
 
-This snap packages the following third-party components:
+OpenJev is a derivative work of Qwen/Qwen3.8-27B (revision 1d4bf0f2ff6012fd82039f2fa52739d0dd7c60c0), which is licensed under the Apache License, Version 2.0, available at: https://huggingface.co/Qwen/Qwen3.8-27B/blob/main/LICENSE
 
-OpenJev model weights (GGUF, Q4_K_M)
-  Provided by OpenJev: https://huggingface.co/openjev/openjev
-  Licensed under the Creative Commons Attribution-NonCommercial 4.0 International
-  (CC BY-NC 4.0) license: https://creativecommons.org/licenses/by-nc/4.0/
-  OpenJev is built on an Apache 2.0 licensed open base model; see the upstream
-  NOTICE file: https://huggingface.co/openjev/openjev/blob/main/NOTICE
+A copy of the CC BY-NC 4.0 license is included herein and can be found in the LICENSE-openjev file.
 
-OpenJev multimodal projector (GGUF, Q8_0)
-  Converted by ggml-org: https://huggingface.co/ggml-org/OpenJev-GGUF
-  Licensed under the same terms as the OpenJev model weights (CC BY-NC 4.0).
+The snap packaging code is licensed separately under the terms specified in the LICENSE file.
 
-llama.cpp
-  https://github.com/ggml-org/llama.cpp
-  Built by Canonical: https://github.com/canonical/llama.cpp-builds
-  Licensed under the MIT license. License files are included in
-  /snap/openjev/current/usr/share/doc/llama.cpp*
+All artifacts and dependencies included within this snap package are subject to their respective licenses, which are documented and available at /snap/<snap-name>/current/usr/share/doc within the installed snap package.
