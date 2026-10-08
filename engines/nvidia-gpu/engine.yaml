@@ -7,7 +7,6 @@ devices:
     - type: gpu
       bus: pci
       vendor-id: 0x10de # NVIDIA Corporation
-      vram: 20G # The Q4_K_M model with mmproj is ~18.3 GiB
 
 runtime: llamacpp-cuda
 

@@ -13,63 +13,48 @@ devices:
     - type: gpu
       vendor-id: 0x1002 # AMD Corporation
       microarchitecture: gfx1010
-      vram: 20G
     - type: gpu
       vendor-id: 0x1002 # AMD Corporation
       microarchitecture: gfx1011
-      vram: 20G
     - type: gpu
       vendor-id: 0x1002 # AMD Corporation
       microarchitecture: gfx1012
-      vram: 20G
     - type: gpu
       vendor-id: 0x1002 # AMD Corporation
       microarchitecture: gfx1030
-      vram: 20G
     - type: gpu
       vendor-id: 0x1002 # AMD Corporation
       microarchitecture: gfx1031
-      vram: 20G
     - type: gpu
       vendor-id: 0x1002 # AMD Corporation
       microarchitecture: gfx1032
-      vram: 20G
     - type: gpu
       vendor-id: 0x1002 # AMD Corporation
       microarchitecture: gfx1100
-      vram: 20G
     - type: gpu
       vendor-id: 0x1002 # AMD Corporation
       microarchitecture: gfx1101
-      vram: 20G
     - type: gpu
       vendor-id: 0x1002 # AMD Corporation
       microarchitecture: gfx1102
-      vram: 20G
     - type: gpu
       vendor-id: 0x1002 # AMD Corporation
       microarchitecture: gfx1150
-      vram: 20G
     - type: gpu
       vendor-id: 0x1002 # AMD Corporation
       microarchitecture: gfx1151
-      vram: 20G
     - type: gpu
       vendor-id: 0x1002 # AMD Corporation
       microarchitecture: gfx1152
-      vram: 20G
     - type: gpu
       vendor-id: 0x1002 # AMD Corporation
       microarchitecture: gfx1153
-      vram: 20G
     - type: gpu
       vendor-id: 0x1002 # AMD Corporation
       microarchitecture: gfx1200
-      vram: 20G
     - type: gpu
       vendor-id: 0x1002 # AMD Corporation
       microarchitecture: gfx1201
-      vram: 20G
 
 runtime: llamacpp-rocm
 
