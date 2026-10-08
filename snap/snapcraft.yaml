@@ -1,0 +1,313 @@
+name: openjev
+title: OpenJev
+summary: Local AI with OpenJev inference snap
+description: |
+  OpenJev is an open-weights decision model that makes typed decisions about text, web pages and screenshots.
+  You describe the decision in plain words at request time, with your own labels, and it answers with a choice,
+  a yes/no probability or a score. It can route support tickets, flag policy violations, judge whether an
+  answer is grounded, and guide browser agents.
+
+  Use this snap to quickly install an optimized environment for local inference with OpenJev.
+
+  The snap includes the following hardware-optimized inference engines:
+
+  * cpu: Optimized for x64 and ARM (armv8, armv9) CPUs
+  * nvidia-gpu: CUDA-enabled GPU acceleration
+  * amd-gpu: ROCm-enabled GPU acceleration for AMD GPUs
+
+  The most suitable engine is automatically selected based on the available hardware.
+
+  **Install:**
+
+  `sudo snap install openjev`
+
+  **Run:**
+
+  `openjev`
+
+  Some accelerators require extra drivers to be usable with this snap:
+  https://documentation.ubuntu.com/inference-snaps/how-to/setup/drivers/
+
+  **License:**
+
+  The OpenJev model is provided by OpenJev under the CC BY-NC 4.0 license:
+  https://creativecommons.org/licenses/by-nc/4.0/
+
+  The licenses of all the bundled software can be found after installing the snap at
+  `/snap/openjev/current/usr/share/doc`.
+
+icon: snap/gui/icon-256.png
+website: https://documentation.ubuntu.com/inference-snaps
+source-code: https://github.com/canonical/openjev-snap
+issues: https://github.com/canonical/inference-snaps/issues
+
+adopt-info: version
+
+base: core24
+grade: stable
+confinement: strict
+compression: lzo
+
+assumes:
+  - snapd2.68
+
+platforms:
+  amd64:
+  arm64:
+
+environment:
+  SNAP_COMPONENTS: /snap/$SNAP_INSTANCE_NAME/components/$SNAP_REVISION
+  ARCH_TRIPLET: $CRAFT_ARCH_TRIPLET_BUILD_FOR
+
+plugs:
+  # To allow sideloading models by root
+  home:
+    read: all
+
+slots:
+  provider:
+    interface: content
+    content: inference-provider
+    source:
+      read:
+        - $SNAP_COMMON/share/provider
+
+hooks:
+  install:
+    plugs: &install-plugs
+      - hardware-observe
+      - opengl
+  post-refresh:
+    plugs: *install-plugs
+
+parts:
+  version:
+    after: [cli]
+    plugin: nil
+    source: . # To regenerate the git hash on every change
+    build-packages:
+      - jq
+      - git
+    override-pull: |
+      # Do nothing. This significantly reduces build time when sourcing large files.
+    override-build: |
+      set -eo pipefail
+      cli_version=$($CRAFT_STAGE/bin/modelctl version --format=json | jq .cli --raw-output)
+      git_hash=$(git -C "$SNAPCRAFT_PROJECT_DIR" describe --always)
+      craftctl set version="${cli_version#v}+${git_hash}"
+
+  cli:
+    source:
+      - on amd64: https://github.com/canonical/inference-snaps-cli/releases/download/v2.0.0-beta.16/inference-snaps-cli-linux-amd64.tar.xz
+      - on arm64: https://github.com/canonical/inference-snaps-cli/releases/download/v2.0.0-beta.16/inference-snaps-cli-linux-arm64.tar.xz
+    plugin: dump
+    override-build: |
+
+      # For tab completion
+      ln --symbolic ./modelctl bin/openjev
+
+      craftctl default
+
+  cli-dependencies:
+    plugin: nil
+    stage-packages:
+      - pciutils # lspci
+
+  # Used for NVIDIA vRAM and CUDA Capability detection.
+  # Only the binary is included to avoid staging libraries, which should instead be provided by the host through the opengl interface.
+  cli-nvidia-smi:
+    plugin: nil
+    build-packages:
+      - nvidia-utils-580
+    override-build: |
+      mkdir -p $CRAFT_PART_INSTALL/usr/bin
+      cp /usr/bin/nvidia-smi $CRAFT_PART_INSTALL/usr/bin/
+
+      license_dir=$CRAFT_PART_INSTALL/usr/share/doc/nvidia-utils-580/
+      mkdir -p $license_dir
+      cp /usr/share/doc/nvidia-utils-580/copyright $license_dir/
+
+  webui:
+    plugin: dump
+    source: https://github.com/canonical/inference-snaps-webui/releases/download/v1.1.0/inference-snaps-webui.tar.xz
+    organize:
+      "*": webui/
+
+  engines:
+    source: engines
+    plugin: dump
+    organize:
+      "*": engines/
+
+  models:
+    source: models
+    plugin: dump
+    organize:
+      "*": models/
+
+  runtimes:
+    source: runtimes
+    plugin: dump
+    organize:
+      "*": runtimes/
+
+  scripts:
+    source: scripts
+    plugin: dump
+    stage-packages:
+      - jq
+    organize:
+      "server.sh": bin/
+      "server-webui.sh": bin/
+
+  # Model weights are downloaded into model-weights/ by `make download-models`.
+  # Shards are split across components to stay below Store size limits.
+  model-weights:
+    plugin: cmake
+    source: model-weights
+    override-build: |
+      cp -rf --archive --link --no-dereference ${CRAFT_PART_SRC}/* ${CRAFT_PART_INSTALL}
+    organize:
+      "model-q4-k-m-gguf/OpenJev-Q4_K_M-00001-of-00004.gguf": (component/model-27b-q4-k-m-gguf-1-of-4)/OpenJev-Q4_K_M-00001-of-00004.gguf
+      "model-q4-k-m-gguf/OpenJev-Q4_K_M-00002-of-00004.gguf": (component/model-27b-q4-k-m-gguf-2-of-4)/OpenJev-Q4_K_M-00002-of-00004.gguf
+      "model-q4-k-m-gguf/OpenJev-Q4_K_M-00003-of-00004.gguf": (component/model-27b-q4-k-m-gguf-3-of-4)/OpenJev-Q4_K_M-00003-of-00004.gguf
+      "model-q4-k-m-gguf/OpenJev-Q4_K_M-00004-of-00004.gguf": (component/model-27b-q4-k-m-gguf-4-of-4)/OpenJev-Q4_K_M-00004-of-00004.gguf
+      "mmproj-q8_0-gguf/mmproj-OpenJev-Q8_0.gguf": (component/mmproj-27b-q8-0-gguf)/mmproj-OpenJev-Q8_0.gguf
+    prime:
+      - -*   # exclude everything not explicitly organized
+
+  llamacpp:
+    plugin: dump
+    source:
+      - on amd64: https://github.com/canonical/llama.cpp-builds/releases/download/b11408/llamacpp-amd64.tar.gz
+      - on arm64: https://github.com/canonical/llama.cpp-builds/releases/download/b11408/llamacpp-arm64.tar.gz
+    override-build: |
+      # Move license files to be included in the snap, not the component
+      mkdir -p $CRAFT_PRIME/usr/share/doc/
+      mv licenses $CRAFT_PRIME/usr/share/doc/llama.cpp
+
+      craftctl default
+    stage-packages:
+      - libgomp1
+    organize:
+      # move everything, including the staged packages
+      "*": (component/llamacpp)
+
+  llamacpp-cuda:
+    plugin: dump
+    source:
+      - on amd64: https://github.com/canonical/llama.cpp-builds/releases/download/b11408/llamacpp-amd64+cuda12.9.tar.gz
+      - on arm64: https://github.com/canonical/llama.cpp-builds/releases/download/b11408/llamacpp-arm64+cuda12.9.tar.gz
+    override-build: |
+      # Move license files to be included in the snap, not the component
+      mkdir -p $CRAFT_PRIME/usr/share/doc/
+      mv licenses $CRAFT_PRIME/usr/share/doc/llama.cpp-cuda
+
+      craftctl default
+    stage-packages:
+      - libgomp1
+    organize:
+      # move everything, including the staged packages
+      "*": (component/llamacpp-cuda)
+
+  llamacpp-rocm:
+    plugin: dump
+    source: https://github.com/canonical/llama.cpp-builds/releases/download/b11408/llamacpp-amd64+rocm.tar.gz
+    override-pull: &amd64-only |
+      if [[ "$CRAFT_ARCH_BUILD_FOR" == "amd64" ]]; then
+        craftctl default
+      fi
+    override-build: |
+      if [[ "$CRAFT_ARCH_BUILD_FOR" == "amd64" ]]; then
+        craftctl default
+        
+        # Move license files to be included in the snap, not the component
+        mkdir -p $CRAFT_PRIME/usr/share/doc/
+        mv licenses $CRAFT_PRIME/usr/share/doc/llama.cpp-rocm
+      fi
+    override-stage: *amd64-only
+    override-prime: *amd64-only
+    stage-packages:
+      - libgomp1
+      - libatomic1
+    organize:
+      # move everything, including the staged packages
+      "*": (component/llamacpp-rocm)
+
+  notice:
+    plugin: nil
+    source: NOTICE
+    source-type: file
+    override-build: |
+      license_dir=$CRAFT_PART_INSTALL/usr/share/doc
+      mkdir -p $license_dir
+      cp NOTICE $license_dir/
+      cp $SNAPCRAFT_PROJECT_DIR/LICENSE $license_dir/
+      cp $SNAPCRAFT_PROJECT_DIR/LICENSE-openjev $license_dir/
+      cp $SNAPCRAFT_PROJECT_DIR/LICENSE-qwen $license_dir/
+
+components:
+  model-27b-q4-k-m-gguf-1-of-4: &model
+    type: standard
+    summary: OpenJev 27B Q4_K_M GGUF model shard
+    description: One of the 4 shards of the OpenJev 27B model in GGUF format with Q4_K_M quantization
+  model-27b-q4-k-m-gguf-2-of-4:
+    <<: *model
+  model-27b-q4-k-m-gguf-3-of-4:
+    <<: *model
+  model-27b-q4-k-m-gguf-4-of-4:
+    <<: *model
+
+  mmproj-27b-q8-0-gguf:
+    type: standard
+    summary: OpenJev 27B multimodal projector
+    description: Multimodal projector for the OpenJev 27B model in GGUF format with Q8_0 quantization
+
+  llamacpp:
+    type: standard
+    summary: llama.cpp for CPU
+    description: Optimized llama.cpp runtime for CPU inference
+
+  llamacpp-cuda:
+    type: standard
+    summary: llama.cpp for NVIDIA GPUs
+    description: llama.cpp runtime built with CUDA for NVIDIA GPU acceleration
+
+  llamacpp-rocm:
+    type: standard
+    summary: llama.cpp for AMD GPUs
+    description: llama.cpp runtime built with ROCm for AMD GPU acceleration
+
+apps:
+  openjev:
+    command: bin/openjev
+    completer: bin/snap-completer.bash
+    plugs:
+      - hardware-observe
+      - opengl
+      - network
+      - desktop # To open the webui in the browser
+    environment:
+      ADDITIONAL_FEATURES: chat, webui
+
+  server:
+    command: bin/server.sh
+    daemon: simple
+    plugs:
+      - network-bind
+      - hardware-observe
+      - opengl
+      - home
+      - process-control # Required by the llama.cpp ROCm runtime
+
+  server-webui:
+    command: bin/server-webui.sh
+    daemon: simple
+    plugs:
+      - network-bind
+
+lint:
+  ignore:
+    - metadata:
+      - license
+      - contact

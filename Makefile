@@ -5,8 +5,7 @@ SHELL := /bin/bash
 # Always run `hf` via pipx to avoid relying on local `hf` installations.
 hf := pipx run --spec "huggingface_hub[cli]" hf
 
-# TODO: Replace with snap name
-SNAP_NAME ?= gemma4 
+SNAP_NAME ?= openjev
 
 ENGINE ?= cpu
 
@@ -57,10 +56,12 @@ init-submodules:
 		git submodule update --init; \
 	fi
 
-# TODO: Update to match the expected model(s):
-download-models: download-model-E4B-Q4_K_M
+download-models: download-model-Q4_K_M
 
-# TODO: Update to match the model. Add one target per model.
-download-model-E4B-Q4_K_M:
-	$(hf) download unsloth/gemma-4-E4B-it-GGUF gemma-4-E4B-it-Q4_K_M.gguf \
-		--local-dir model-weights/model-e4b-q4-k-m-gguf/
+download-model-Q4_K_M:
+	@echo "Downloading OpenJev Q4_K_M model weights..."
+	$(hf) download inference-snaps/openjev-Q4_K_M-5GB \
+		--local-dir model-weights/model-q4-k-m-gguf
+	$(hf) download ggml-org/OpenJev-GGUF mmproj-OpenJev-Q8_0.gguf \
+		--local-dir model-weights/mmproj-q8_0-gguf/
+

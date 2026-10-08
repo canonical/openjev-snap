@@ -1,0 +1,68 @@
+name: amd-gpu
+summary: AMD GPU engine
+experimental: true
+description: |
+  ROCm-enabled GPU acceleration for AMD GPUs, using llama.cpp.
+  Targets the microarchitectures the llama.cpp ROCm build is compiled for.
+vendor: Canonical Ltd
+devices:
+  allof:
+    - type: cpu
+      architecture: amd64
+  anyof:
+    - type: gpu
+      vendor-id: 0x1002 # AMD Corporation
+      microarchitecture: gfx1010
+    - type: gpu
+      vendor-id: 0x1002 # AMD Corporation
+      microarchitecture: gfx1011
+    - type: gpu
+      vendor-id: 0x1002 # AMD Corporation
+      microarchitecture: gfx1012
+    - type: gpu
+      vendor-id: 0x1002 # AMD Corporation
+      microarchitecture: gfx1030
+    - type: gpu
+      vendor-id: 0x1002 # AMD Corporation
+      microarchitecture: gfx1031
+    - type: gpu
+      vendor-id: 0x1002 # AMD Corporation
+      microarchitecture: gfx1032
+    - type: gpu
+      vendor-id: 0x1002 # AMD Corporation
+      microarchitecture: gfx1100
+    - type: gpu
+      vendor-id: 0x1002 # AMD Corporation
+      microarchitecture: gfx1101
+    - type: gpu
+      vendor-id: 0x1002 # AMD Corporation
+      microarchitecture: gfx1102
+    - type: gpu
+      vendor-id: 0x1002 # AMD Corporation
+      microarchitecture: gfx1150
+    - type: gpu
+      vendor-id: 0x1002 # AMD Corporation
+      microarchitecture: gfx1151
+    - type: gpu
+      vendor-id: 0x1002 # AMD Corporation
+      microarchitecture: gfx1152
+    - type: gpu
+      vendor-id: 0x1002 # AMD Corporation
+      microarchitecture: gfx1153
+    - type: gpu
+      vendor-id: 0x1002 # AMD Corporation
+      microarchitecture: gfx1200
+    - type: gpu
+      vendor-id: 0x1002 # AMD Corporation
+      microarchitecture: gfx1201
+
+runtime: llamacpp-rocm
+
+model:
+  default: openjev-27b
+  options:
+    - openjev-27b
+
+configurations:
+  sleep-idle-seconds: 600
+  min-context-size: 4096
