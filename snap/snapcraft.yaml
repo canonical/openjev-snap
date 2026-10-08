@@ -244,6 +244,7 @@ parts:
       cp NOTICE $license_dir/
       cp $SNAPCRAFT_PROJECT_DIR/LICENSE $license_dir/
       cp $SNAPCRAFT_PROJECT_DIR/LICENSE-openjev $license_dir/
+      cp $SNAPCRAFT_PROJECT_DIR/LICENSE-qwen $license_dir/
 
 components:
   model-27b-q4-k-m-gguf-1-of-4: &model
