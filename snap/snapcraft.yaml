@@ -213,18 +213,20 @@ parts:
   llamacpp-rocm:
     plugin: dump
     source: https://github.com/canonical/llama.cpp-builds/releases/download/b11408/llamacpp-amd64+rocm.tar.gz
-    override-pull: |
-      [ "$CRAFT_ARCH_BUILD_FOR" == "amd64" ] && craftctl default || exit 0
+    override-pull: &amd64-only |
+      if [[ "$CRAFT_ARCH_BUILD_FOR" == "amd64" ]]; then
+        craftctl default
+      fi
     override-build: |
-      [ "$CRAFT_ARCH_BUILD_FOR" == "amd64" ] && craftctl default || exit 0
-
-      # Move license files to be included in the snap, not the component
-      mkdir -p $CRAFT_PRIME/usr/share/doc/
-      mv licenses $CRAFT_PRIME/usr/share/doc/llama.cpp-rocm
-    override-stage: |
-      [ "$CRAFT_ARCH_BUILD_FOR" == "amd64" ] && craftctl default || exit 0
-    override-prime: |
-      [ "$CRAFT_ARCH_BUILD_FOR" == "amd64" ] && craftctl default || exit 0
+      if [[ "$CRAFT_ARCH_BUILD_FOR" == "amd64" ]]; then
+        craftctl default
+        
+        # Move license files to be included in the snap, not the component
+        mkdir -p $CRAFT_PRIME/usr/share/doc/
+        mv licenses $CRAFT_PRIME/usr/share/doc/llama.cpp-rocm
+      fi
+    override-stage: *amd64-only
+    override-prime: *amd64-only
     stage-packages:
       - libgomp1
       - libatomic1
