@@ -304,3 +304,9 @@ apps:
     daemon: simple
     plugs:
       - network-bind
+
+lint:
+  ignore:
+    - metadata:
+      - license
+      - contact
