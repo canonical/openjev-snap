@@ -23,10 +23,15 @@ jobs:
       build-runner: |
         [
           ["amd64", "large", "noble", "self-hosted"],
-          ["arm64", "xlarge", "noble", "self-hosted"]
+          ["arm64", "large", "noble", "self-hosted"]
         ]
       store-track: latest
       snap-name: openjev
+      smoke-test-runner: |
+        [
+          ["amd64", "large", "noble", "self-hosted"],
+          ["arm64", "large", "noble", "self-hosted"]
+        ]
       smoke-test-engine: cpu
       smoke-test-features: openai_models, openai_chat_text
     secrets:
