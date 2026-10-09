@@ -6,7 +6,7 @@ on:
 
 jobs:
   ai-test:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, large, noble, amd64]
     steps:
       - name: Run test
         uses: canonical/inference-snaps-dev/.github/actions/agentic-test@v2

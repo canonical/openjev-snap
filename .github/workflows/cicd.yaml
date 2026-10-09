@@ -23,7 +23,7 @@ jobs:
       build-runner: |
         [
           ["amd64", "large", "noble", "self-hosted"],
-          ["arm64", "large", "noble", "self-hosted"]
+          ["arm64", "xlarge", "noble", "self-hosted"]
         ]
       store-track: latest
       snap-name: openjev
