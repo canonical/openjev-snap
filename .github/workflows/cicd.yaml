@@ -30,7 +30,7 @@ jobs:
       smoke-test-runner: |
         [
           ["amd64", "large", "noble", "self-hosted"],
-          ["arm64", "large", "noble", "self-hosted"]
+          ["arm64", "xlarge", "noble", "self-hosted"]
         ]
       smoke-test-engine: cpu
       smoke-test-features: openai_models, openai_chat_text
