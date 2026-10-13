@@ -33,6 +33,6 @@ jobs:
           ["arm64", "xlarge", "noble", "self-hosted"]
         ]
       smoke-test-engine: cpu
-      smoke-test-features: openai_models, openai_chat_text
+      smoke-test-features: openai_models, openai_chat_text, systemone_decision
     secrets:
       store-credentials: ${{ secrets.STORE_LOGIN_MAIN }}
